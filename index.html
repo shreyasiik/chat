@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #chat-box {
+            border: 1px solid #ccc;
+            width: 300px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 300px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Application</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="message-input" placeholder="Type a message..." onkeydown="if(event.key === 'Enter'){sendMessage();}">
+
+    <script>
+        const socket = io.connect('http://localhost:5000');  // Replace with your server address if deployed
+
+        // Listen for incoming messages
+        socket.on('response', function(msg) {
+            const chatBox = document.getElementById('chat-box');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = msg;
+            chatBox.appendChild(newMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            if (message) {
+                socket.emit('message', message);
+                input.value = '';  // Clear the input field
+            }
+        }
+    </script>
+</body>
+</html>
