@@ -15,4 +15,4 @@ def handle_message(msg):
     emit('response', msg, broadcast=True)  # Send message to all clients
 
 if __name__ == "__main__":
-    socketio.run(app, port=5002, debug=True)  # Correct way to run the app with SocketIO
+    socketio.run(app, host="0.0.0.0", port=5000)
